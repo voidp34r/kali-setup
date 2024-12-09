@@ -6,9 +6,10 @@
   roles:
     # - role: "roles/pre-config"
     # - role: "roles/package-install"
-    - role: "roles/tools-install"
+    # - role: "roles/tools-install"
+    - role: "roles/kubernetes"
       vars:
       - optional_tools: 
         # - "sublime"
         - "vscode"
-    - role: "roles/system-customizations"
+    # - role: "roles/system-customizations"
