@@ -1,14 +1,14 @@
 # code: language=ansible
 ---
 - name: "Customizing Kali"
-  hosts: localhost
-  connection: local
+  hosts: core
+  become: true
   roles:
-    - role: "roles/pre-config"
-    - role: "roles/package-install"
+    # - role: "roles/pre-config"
+    # - role: "roles/package-install"
     - role: "roles/tools-install"
       vars:
       - optional_tools: 
-        - "sublime"
+        # - "sublime"
         - "vscode"
     - role: "roles/system-customizations"

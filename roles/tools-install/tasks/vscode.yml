@@ -5,7 +5,7 @@
     name: gantsign.visual-studio-code
   vars:
     users:
-      - username: "{{ lookup('ansible.builtin.env', 'USER') }}"
+      - username: "{{ lookup('ansible.builtin.env', 'KALI_USER') }}"
         visual_studio_code_extensions:
           - bungcip.better-toml
           - eamodio.gitlens

@@ -3,12 +3,12 @@
 - name: Clone pyenv git repositories
   ansible.builtin.git:
     repo: "https://github.com/pyenv/pyenv.git"
-    dest: "{{ lookup('ansible.builtin.env', 'HOME') }}/.pyenv"
+    dest: "{{ lookup('ansible.builtin.env', 'KALI_HOME') }}/.pyenv"
     force: true
 - name: Clone pyenv plugin git repositories
   ansible.builtin.git:
     repo: "https://github.com/{{ item.repo }}"
-    dest: "{{ lookup('ansible.builtin.env', 'HOME') }}/.pyenv/plugins/{{ item.name }}"
+    dest: "{{ lookup('ansible.builtin.env', 'KALI_HOME') }}/.pyenv/plugins/{{ item.name }}"
     force: true
   loop: 
     - name: pyenv-doctot
@@ -19,7 +19,7 @@
       repo: "pyenv/pyenv-virtualenv.git"
 - name: Setup pyenv init in .zshrc
   ansible.builtin.blockinfile:
-    path: "{{ lookup('ansible.builtin.env', 'HOME') }}/.zshrc"
+    path: "{{ lookup('ansible.builtin.env', 'KALI_HOME') }}/.zshrc"
     insertbefore: EOF
     marker: "# {mark} pyenv Setup header"
     block: |

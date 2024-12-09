@@ -9,7 +9,18 @@
   ansible.builtin.pip:
     name: "{{ item }}"
     executable: pip3
+    extra_args: --break-system-packages
   loop: "{{ python_pip_packages }}"
+  # become: true
+
+# https://www.kali.org/docs/general-use/python3-external-packages/
+- name: Install Python Pipx Packages
+  ansible.builtin.pip:
+    name: "{{ item }}"
+    executable: pipx
+    # extra_args: --break-system-packages
+  loop: "{{ python_pipx_packages }}"
+  # become: true
 
 - name: Install Ruby Gem Packages
   community.general.gem:

@@ -1,41 +1,41 @@
 # code: language=ansible
 ---
 # Exa
-- name: Set Exa as ls alias - User
-  ansible.builtin.lineinfile:
-    path: "{{ lookup('ansible.builtin.env', 'HOME') }}/.zshrc"
-    regexp: ^alias ls="exa"'
-    insertafter: "EOF"
-    line: 'alias ls="exa"'
+# - name: Set Exa as ls alias - User
+#   ansible.builtin.lineinfile:
+#     path: "{{ lookup('ansible.builtin.env', 'KALI_HOME') }}/.zshrc"
+#     regexp: ^alias ls="exa"'
+#     insertafter: "EOF"
+#     line: 'alias ls="exa"'
 
-- name: Set Exa as ls alias - Root
-  ansible.builtin.lineinfile:
-    path: "/root/.zshrc"
-    regexp: ^alias ls="exa"'
-    insertafter: "EOF"
-    line: 'alias ls="exa"'
-  become: true
+# - name: Set Exa as ls alias - Root
+#   ansible.builtin.lineinfile:
+#     path: "/root/.zshrc"
+#     regexp: ^alias ls="exa"'
+#     insertafter: "EOF"
+#     line: 'alias ls="exa"'
+#   become: true
 
 - name: Recursively change ownership of the ~/powerlevel10k directory
   ansible.builtin.file:
-    path: "{{ lookup('ansible.builtin.env', 'HOME') }}/powerlevel10k"
+    path: "{{ lookup('ansible.builtin.env', 'KALI_HOME') }}/powerlevel10k"
     state: directory
     recurse: true
-    owner: "{{ lookup('ansible.builtin.env', 'USER') }}"
-    group: "{{ lookup('ansible.builtin.env', 'USER') }}"
+    owner: "{{ lookup('ansible.builtin.env', 'KALI_USER') }}"
+    group: "{{ lookup('ansible.builtin.env', 'KALI_USER') }}"
 
 - name: Recursively change ownership of the /opt directory
   ansible.builtin.file:
     path: /opt
     state: directory
     recurse: true
-    owner: "{{ lookup('ansible.builtin.env', 'USER') }}"
-    group: "{{ lookup('ansible.builtin.env', 'USER') }}"
+    owner: "{{ lookup('ansible.builtin.env', 'KALI_USER') }}"
+    group: "{{ lookup('ansible.builtin.env', 'KALI_USER') }}"
   become: true
 
 - name: Setup p10k prompt in .zshrc - start
   ansible.builtin.blockinfile:
-    path: "{{ lookup('ansible.builtin.env', 'HOME') }}/.zshrc"
+    path: "{{ lookup('ansible.builtin.env', 'KALI_HOME') }}/.zshrc"
     insertbefore: BOF
     marker: "# {mark} P10K Setup header"
     block: |
@@ -48,7 +48,7 @@
 
 - name: Setup p10k prompt in .zshrc - end
   ansible.builtin.blockinfile:
-    path: "{{ lookup('ansible.builtin.env', 'HOME') }}/.zshrc"
+    path: "{{ lookup('ansible.builtin.env', 'KALI_HOME') }}/.zshrc"
     insertafter: "EOF"
     marker: "# {mark} P10K Setup footer"
     block: |
@@ -58,13 +58,13 @@
 - name: Copy p10k setting file 
   ansible.builtin.copy:
     src: files/.p10k.zsh
-    dest: "{{ lookup('ansible.builtin.env', 'HOME') }}/"
-    owner: "{{ lookup('ansible.builtin.env', 'USER') }}"
-    group: "{{ lookup('ansible.builtin.env', 'USER') }}"
+    dest: "{{ lookup('ansible.builtin.env', 'KALI_HOME') }}/"
+    owner: "{{ lookup('ansible.builtin.env', 'KALI_USER') }}"
+    group: "{{ lookup('ansible.builtin.env', 'KALI_USER') }}"
     mode: '0644'
 
 - name: Source .zshrc
-  ansible.builtin.shell: source "{{ lookup('ansible.builtin.env', 'HOME') }}/.zshrc"
+  ansible.builtin.shell: source "{{ lookup('ansible.builtin.env', 'KALI_HOME') }}/.zshrc"
   args:
     executable: /bin/zsh
 
@@ -83,9 +83,9 @@
 - name: Overwrite terminal settings
   ansible.builtin.template:
     src: qterminal.ini.j2
-    dest: "{{ lookup('ansible.builtin.env', 'HOME') }}/.config/qterminal.org/qterminal.ini"
-    owner: "{{ lookup('ansible.builtin.env', 'USER') }}"
-    group: "{{ lookup('ansible.builtin.env', 'USER') }}"
+    dest: "{{ lookup('ansible.builtin.env', 'KALI_HOME') }}/.config/qterminal.org/qterminal.ini"
+    owner: "{{ lookup('ansible.builtin.env', 'KALI_USER') }}"
+    group: "{{ lookup('ansible.builtin.env', 'KALI_USER') }}"
     mode: '0644'
 
 - name: Enable Postgresql service

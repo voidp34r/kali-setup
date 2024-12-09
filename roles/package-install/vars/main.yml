@@ -1,14 +1,14 @@
 ---
 packages:
-  - awscli
-  - azure-cli
+  # - awscli
+  # - azure-cli
   - cmake
   #- covenant-kbx # Does not install on Arm64/M1/M2
   - curl
-  - docker-compose
+  # - docker-compose
   - docker.io
   - enum4linux
-  - exa
+  # - exa
   - exif
   - exiftool
   - ffuf
@@ -44,9 +44,12 @@ packages:
   - xsel
 
 python_pip_packages:
+  - capstone
+  - unicorn
+
+python_pipx_packages:
   - arsenal-cli
   - bloodhound
-  - capstone
   - mitm6
   - pipenv
   - poetry
@@ -54,8 +57,7 @@ python_pip_packages:
   - pywal
   - roadrecon
   - ropper
-  - unicorn
-
+ 
 ruby_gem_packages:
   - evil-winrm
   - stringio

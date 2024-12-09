@@ -11,12 +11,12 @@
 - name: Install Git based tools
   ansible.builtin.include_tasks:
     file: git_tools.yml
-- name: Setup ZSH and it's fonts
-  ansible.builtin.include_tasks:
-    file: zsh_setup.yml
-- name: Setup Tmux
-  ansible.builtin.include_tasks:
-    file: tmux_setup.yml
+# - name: Setup ZSH and it's fonts
+#   ansible.builtin.include_tasks:
+#     file: zsh_setup.yml
+# - name: Setup Tmux
+#   ansible.builtin.include_tasks:
+#     file: tmux_setup.yml
 
 - name: Install optional tools
   ansible.builtin.include_tasks:

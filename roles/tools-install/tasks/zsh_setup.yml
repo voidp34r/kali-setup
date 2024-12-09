@@ -2,17 +2,17 @@
 ---
 - name: Ensure fonts directory exists
   file:
-    path: "{{ lookup('ansible.builtin.env', 'HOME') }}/.fonts"
-    owner: "{{ lookup('ansible.builtin.env', 'USER') }}"
-    group: "{{ lookup('ansible.builtin.env', 'USER') }}"
+    path: "{{ lookup('ansible.builtin.env', 'KALI_HOME') }}/.fonts"
+    owner: "{{ lookup('ansible.builtin.env', 'KALI_USER') }}"
+    group: "{{ lookup('ansible.builtin.env', 'KALI_USER') }}"
     state: directory
 
 - name: Install MesloLGS NF fonts
   ansible.builtin.get_url:
     url: "{{ item.url }}"
     dest: "{{ item.dest }}"
-    owner: "{{ lookup('ansible.builtin.env', 'USER') }}"
-    group: "{{ lookup('ansible.builtin.env', 'USER') }}"
+    owner: "{{ lookup('ansible.builtin.env', 'KALI_USER') }}"
+    group: "{{ lookup('ansible.builtin.env', 'KALI_USER') }}"
     mode: 0644
   loop: "{{ fonts }}"
 
@@ -22,9 +22,9 @@
 - name: Touch zshhistory
   ansible.builtin.file:
     state: touch
-    owner: "{{ lookup('ansible.builtin.env', 'USER') }}"
-    group: "{{ lookup('ansible.builtin.env', 'USER') }}"
-    path: "{{ lookup('ansible.builtin.env', 'HOME') }}/.cache/zshhistory"
+    owner: "{{ lookup('ansible.builtin.env', 'KALI_USER') }}"
+    group: "{{ lookup('ansible.builtin.env', 'KALI_USER') }}"
+    path: "{{ lookup('ansible.builtin.env', 'KALI_HOME') }}/.cache/zshhistory"
 
 - name: Git clone Powerlevel10k
   git:
@@ -37,7 +37,7 @@
 
 - name: Ensure powerlvl10k zsh theme to zshrc - User
   ansible.builtin.lineinfile:
-    path: "{{ lookup('ansible.builtin.env', 'HOME') }}/.zshrc"
+    path: "{{ lookup('ansible.builtin.env', 'KALI_HOME') }}/.zshrc"
     regexp: "^source /opt/powerlevel10k/powerlevel10k.zsh-theme"
     insertafter: "EOF"
     line: "source /opt/powerlevel10k/powerlevel10k.zsh-theme"

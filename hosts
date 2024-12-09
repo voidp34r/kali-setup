@@ -1,0 +1,13 @@
+# Set workers IP address
+# Set workers w/GPU IP address
+[core]
+dolores ansible_host=192.168.3.10
+; [node-cpu]
+; ubiq-fawkes ansible_host=$HOST_CORE ansible_user=$HOST_USER
+
+; [node-gpu]
+; ubiq-dumbledor eansible_host=$HOST_CORE ansible_user=$HOST_USER
+[all:vars]
+ansible_user=voidp34r
+ansible_become_password=akuma
+; ansible_python_interprete=/usr/bin/python3

@@ -1,7 +1,7 @@
 ---
-- name: Set timezone to Europe/Amsterdam
+- name: Set timezone to America/Sao_Paulo
   community.general.timezone:
-    name: Europe/Amsterdam
+    name: America/Sao_Paulo
   become: true
 
 - name: Update apt package lists
