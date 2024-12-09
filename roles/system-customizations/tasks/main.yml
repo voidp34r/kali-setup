@@ -1,0 +1,144 @@
+# code: language=ansible
+---
+# Exa
+- name: Set Exa as ls alias - User
+  ansible.builtin.lineinfile:
+    path: "{{ lookup('ansible.builtin.env', 'HOME') }}/.zshrc"
+    regexp: ^alias ls="exa"'
+    insertafter: "EOF"
+    line: 'alias ls="exa"'
+
+- name: Set Exa as ls alias - Root
+  ansible.builtin.lineinfile:
+    path: "/root/.zshrc"
+    regexp: ^alias ls="exa"'
+    insertafter: "EOF"
+    line: 'alias ls="exa"'
+  become: true
+
+- name: Recursively change ownership of the ~/powerlevel10k directory
+  ansible.builtin.file:
+    path: "{{ lookup('ansible.builtin.env', 'HOME') }}/powerlevel10k"
+    state: directory
+    recurse: true
+    owner: "{{ lookup('ansible.builtin.env', 'USER') }}"
+    group: "{{ lookup('ansible.builtin.env', 'USER') }}"
+
+- name: Recursively change ownership of the /opt directory
+  ansible.builtin.file:
+    path: /opt
+    state: directory
+    recurse: true
+    owner: "{{ lookup('ansible.builtin.env', 'USER') }}"
+    group: "{{ lookup('ansible.builtin.env', 'USER') }}"
+  become: true
+
+- name: Setup p10k prompt in .zshrc - start
+  ansible.builtin.blockinfile:
+    path: "{{ lookup('ansible.builtin.env', 'HOME') }}/.zshrc"
+    insertbefore: BOF
+    marker: "# {mark} P10K Setup header"
+    block: |
+      # Enable Powerlevel10k instant prompt. Should stay close to the top of ~/.zshrc.
+      # Initialization code that may require console input (password prompts, [y/n]
+      # confirmations, etc.) must go above this block; everything else may go below.
+      if [[ -r "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh" ]]; then
+        source "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh"
+      fi
+
+- name: Setup p10k prompt in .zshrc - end
+  ansible.builtin.blockinfile:
+    path: "{{ lookup('ansible.builtin.env', 'HOME') }}/.zshrc"
+    insertafter: "EOF"
+    marker: "# {mark} P10K Setup footer"
+    block: |
+      # To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
+      [[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
+
+- name: Copy p10k setting file 
+  ansible.builtin.copy:
+    src: files/.p10k.zsh
+    dest: "{{ lookup('ansible.builtin.env', 'HOME') }}/"
+    owner: "{{ lookup('ansible.builtin.env', 'USER') }}"
+    group: "{{ lookup('ansible.builtin.env', 'USER') }}"
+    mode: '0644'
+
+- name: Source .zshrc
+  ansible.builtin.shell: source "{{ lookup('ansible.builtin.env', 'HOME') }}/.zshrc"
+  args:
+    executable: /bin/zsh
+
+- name: Tweaking OpenSSL
+  ansible.builtin.lineinfile:
+    path: /etc/ssl/openssl.cnf
+    regexp: "{{ item.regexp }}"
+    line: "{{ item.line }}"
+  loop:
+    - regexp: "^MinProtocol ="
+      line: "MinProtocol = None"
+    - regexp: "^CipherStrings ="
+      line: "CipherStrings = DEFAULT"
+  become: true
+
+- name: Overwrite terminal settings
+  ansible.builtin.template:
+    src: qterminal.ini.j2
+    dest: "{{ lookup('ansible.builtin.env', 'HOME') }}/.config/qterminal.org/qterminal.ini"
+    owner: "{{ lookup('ansible.builtin.env', 'USER') }}"
+    group: "{{ lookup('ansible.builtin.env', 'USER') }}"
+    mode: '0644'
+
+- name: Enable Postgresql service
+  ignore_errors: true
+  ansible.builtin.systemd:
+    name: postgresql.service
+    state: started
+    enabled: true
+  become: true
+
+- name: Check msfdb status
+  ignore_errors: true
+  ansible.builtin.command: msfdb status
+  register: msfdb_status
+  changed_when: false
+  become: true
+
+- name: Initialize msfdb
+  ignore_errors: true
+  ansible.builtin.command: msfdb init
+  when: "'No configuration file found' in msfdb_status.stdout"
+  become: true
+
+- name: Enable SSH service
+  ansible.builtin.service:
+    name: ssh
+    enabled: true
+  become: true
+
+- name: Start docker service
+  ansible.builtin.service:
+    name: docker
+    state: started
+  become: true
+
+- name: Remove unnecessary packages
+  ansible.builtin.apt:
+    autoremove: true
+  become: true
+
+- name: Clean apt cache
+  ansible.builtin.apt:
+    autoclean: true
+  become: true
+
+- name: Check if Rockyou.txt.gz exists
+  ansible.builtin.stat:
+    path: /usr/share/wordlists/rockyou.txt.gz
+  register: rockyou_gz
+
+- name: Gunzip Rockyou wordlist
+  ansible.builtin.shell: "gunzip /usr/share/wordlists/rockyou.txt.gz"
+  args:
+    executable: /bin/bash
+  become: true
+  when: rockyou_gz.stat.exists

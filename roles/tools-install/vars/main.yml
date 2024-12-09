@@ -1,0 +1,107 @@
+---
+autorecon_packages:
+  - curl
+  - dnsrecon
+  - enum4linux
+  - feroxbuster
+  - gobuster
+  - impacket-scripts
+  - nbtscan
+  - nikto
+  - nmap
+  - onesixtyone
+  - oscanner
+  - redis-tools
+  - seclists
+  - smbclient
+  - smbmap
+  - sslscan
+  - tnscmd10g
+  - whatweb
+  - wkhtmltopdf
+
+vscode_packages:
+  - ca-certificates
+  - apt-transport-https
+  - gconf2
+  - libasound2
+  - libgtk2.0-0
+  - libxss1
+  - libxcb-dri3-0
+  - libdrm2
+  - libgbm1
+  - libxshmfence1
+
+git_repos:
+  - name: linenum
+    repo: https://github.com/rebootuser/LinEnum.git
+  - name: linux-exploit-suggester-1
+    repo: https://github.com/mzet-/linux-exploit-suggester.git
+  - name: linux-exploit-suggester-2
+    repo: https://github.com/jondonas/linux-exploit-suggester-2.git
+  - name: linux-smart-enumeration
+    repo: https://github.com/diego-treitos/linux-smart-enumeration.git
+  - name: just-another-windows-enum-script
+    repo: https://github.com/411Hall/JAWS.git
+  - name: watson
+    repo: https://github.com/rasta-mouse/Watson.git
+  - name: adpeas
+    repo: https://github.com/61106960/adPEAS.git
+
+  - name: droopescan
+    repo: https://github.com/droope/droopescan.git
+  - name: joomscan
+    repo: https://github.com/OWASP/joomscan.git
+  - name: gittools
+    repo: https://github.com/internetwache/GitTools.git
+
+misc_downloads:
+  - url: https://github.com/DominicBreuker/pspy/releases/download/v1.2.0/pspy64
+    dest: /opt/tools/pspy/pspy64
+    mode: "0755"
+  - url: https://github.com/DominicBreuker/pspy/releases/download/v1.2.0/pspy64s
+    dest: /opt/tools/pspy/pspy64s
+    mode: "0755"
+  - url: https://eternallybored.org/misc/netcat/netcat-win32-1.12.zip
+    dest: /opt/tools/nc/nc.zip
+    mode: "0755"
+  - url: https://github.com/ohpe/juicy-potato/releases/download/v0.1/JuicyPotato.exe
+    dest: /opt/tools/exploits/jp/jp.exe
+    mode: "0755"
+  - url: https://download.sysinternals.com/files/PSTools.zip
+    dest: /opt/tools/pstools/pstools.zip
+    mode: "0755"
+  - url: https://github.com/ankh2054/windows-pentest/raw/master/Privelege/accesschk-2003-xp.exe
+    dest: /opt/tools/accesschk.exe
+    mode: "0755"
+  - url: https://the.earth.li/~sgtatham/putty/latest/w64/plink.exe
+    dest: /opt/tools/plink.exe
+    mode: "0755"
+  - url: https://github.com/itm4n/PrintSpoofer/releases/download/v1.0/PrintSpoofer32.exe
+    dest: /opt/tools/exploits/printspoofer32.exe
+    mode: "0755"
+  - url: https://github.com/itm4n/PrintSpoofer/releases/download/v1.0/PrintSpoofer64.exe
+    dest: /opt/tools/exploits/printspoofer64.exe
+    mode: "0755"
+  - url: https://github.com/carlospolop/PEASS-ng/releases/download/refs%2Fpull%2F260%2Fmerge/linpeas.sh
+    dest: /opt/tools/peas/linpeas.sh
+    mode: "0755"
+  - url: https://github.com/carlospolop/PEASS-ng/releases/download/refs%2Fpull%2F260%2Fmerge/winPEASany.exe
+    dest: /opt/tools/peas/winpeas.exe
+    mode: "0755"
+
+# Define fonts to install
+fonts:
+  # MesloLGS NF
+  - url: https://github.com/romkatv/powerlevel10k-media/raw/master/MesloLGS%20NF%20Regular.ttf
+    dest: "{{ lookup('ansible.builtin.env', 'HOME') }}/.fonts/meslolgs_nf_regular.ttf"
+    mode: "0755"
+  - url: https://github.com/romkatv/powerlevel10k-media/raw/master/MesloLGS%20NF%20Bold.ttf
+    dest: "{{ lookup('ansible.builtin.env', 'HOME') }}/.fonts/meslolgs_nf_bold.ttf"
+    mode: "0755"
+  - url: https://github.com/romkatv/powerlevel10k-media/raw/master/MesloLGS%20NF%20Italic.ttf
+    dest: "{{ lookup('ansible.builtin.env', 'HOME') }}/.fonts/meslolgs_nf_italic.ttf"
+    mode: "0755"
+  - url: https://github.com/romkatv/powerlevel10k-media/raw/master/MesloLGS%20NF%20Bold%20Italic.ttf
+    dest: "{{ lookup('ansible.builtin.env', 'HOME') }}/.fonts/meslolgs_nf_bold_italic.ttf"
+    mode: "0755"

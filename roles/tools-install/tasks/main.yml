@@ -1,0 +1,27 @@
+# code: language=ansible
+---
+- name: Ensure git is installed.
+  ansible.builtin.apt:
+    name: "git"
+    state: present
+  become: true
+- name: Install Auto recon
+  ansible.builtin.include_tasks:
+    file: autorecon.yml
+- name: Install Git based tools
+  ansible.builtin.include_tasks:
+    file: git_tools.yml
+- name: Setup ZSH and it's fonts
+  ansible.builtin.include_tasks:
+    file: zsh_setup.yml
+- name: Setup Tmux
+  ansible.builtin.include_tasks:
+    file: tmux_setup.yml
+
+- name: Install optional tools
+  ansible.builtin.include_tasks:
+    file: "{{ tool }}.yml"
+  loop: "{{ optional_tools }}"
+  loop_control:
+    loop_var: tool
+

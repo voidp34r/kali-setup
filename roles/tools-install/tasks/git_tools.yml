@@ -1,0 +1,34 @@
+# code: language=ansible
+---
+- name: clone git repositories, download files and create directory structure
+  block:
+  - name: Clone git repositories
+    ansible.builtin.git:
+      repo: "{{ item.repo }}"
+      dest: "/opt/{{ item.name }}"
+      force: true
+    loop: "{{ git_repos | flatten(levels=1) }}"
+    become: true
+
+  # Miscellaneous tools
+  - name: Ensure destination directory exists
+    ansible.builtin.file:
+      dest: "{{ item.dest | dirname }}"
+      state: directory
+      owner: root
+      group: root
+      mode: 0755
+    loop: "{{ misc_downloads }}"
+    become: true
+
+  - name: Download files
+    ansible.builtin.get_url:
+      url: "{{ item.url }}"
+      dest: "{{ item.dest }}"
+      owner: root
+      group: root
+      mode: 0644
+    loop: "{{ misc_downloads }}"
+    become: true
+  ignore_errors: true
+  

@@ -1,0 +1,52 @@
+# code: language=ansible
+---
+- name: Ensure fonts directory exists
+  file:
+    path: "{{ lookup('ansible.builtin.env', 'HOME') }}/.fonts"
+    owner: "{{ lookup('ansible.builtin.env', 'USER') }}"
+    group: "{{ lookup('ansible.builtin.env', 'USER') }}"
+    state: directory
+
+- name: Install MesloLGS NF fonts
+  ansible.builtin.get_url:
+    url: "{{ item.url }}"
+    dest: "{{ item.dest }}"
+    owner: "{{ lookup('ansible.builtin.env', 'USER') }}"
+    group: "{{ lookup('ansible.builtin.env', 'USER') }}"
+    mode: 0644
+  loop: "{{ fonts }}"
+
+- name: rebuild system font cache
+  ansible.builtin.shell: fc-cache -f -v
+
+- name: Touch zshhistory
+  ansible.builtin.file:
+    state: touch
+    owner: "{{ lookup('ansible.builtin.env', 'USER') }}"
+    group: "{{ lookup('ansible.builtin.env', 'USER') }}"
+    path: "{{ lookup('ansible.builtin.env', 'HOME') }}/.cache/zshhistory"
+
+- name: Git clone Powerlevel10k
+  git:
+    repo: https://github.com/romkatv/powerlevel10k.git
+    dest: "/opt/powerlevel10k"
+    depth: 1
+    update: true
+    force: true
+  become: true
+
+- name: Ensure powerlvl10k zsh theme to zshrc - User
+  ansible.builtin.lineinfile:
+    path: "{{ lookup('ansible.builtin.env', 'HOME') }}/.zshrc"
+    regexp: "^source /opt/powerlevel10k/powerlevel10k.zsh-theme"
+    insertafter: "EOF"
+    line: "source /opt/powerlevel10k/powerlevel10k.zsh-theme"
+
+- name: Ensure powerlvl10k zsh theme to zshrc - Root
+  ansible.builtin.lineinfile:
+    path: "/root/.zshrc"
+    regexp: "^source /opt/powerlevel10k/powerlevel10k.zsh-theme"
+    insertafter: "EOF"
+    line: "source /opt/powerlevel10k/powerlevel10k.zsh-theme"
+  become: true
+

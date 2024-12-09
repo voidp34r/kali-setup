@@ -1,0 +1,38 @@
+# code: language=ansible
+---
+- name: Ensure Tmux is installed.
+  ansible.builtin.apt:
+    name: "tmux"
+    state: present
+  become: true
+
+- name: Set .tmux.conf settings
+  ansible.builtin.template:
+    src: templates/tmux.conf.j2
+    dest: "{{ lookup('ansible.builtin.env', 'HOME') }}/.tmux.conf"
+    owner: "{{ lookup('ansible.builtin.env', 'USER') }}"
+    group: "{{ lookup('ansible.builtin.env', 'USER') }}"
+
+- name: Ensure .tmux directory exists
+  ansible.builtin.file:
+    path: "{{ lookup('ansible.builtin.env', 'HOME') }}/.tmux/"
+    owner: "{{ lookup('ansible.builtin.env', 'USER') }}"
+    group: "{{ lookup('ansible.builtin.env', 'USER') }}"
+    state: directory
+
+- name: Ensure tmux plugins directory exists
+  ansible.builtin.file:
+    path: "{{ lookup('ansible.builtin.env', 'HOME') }}/.tmux/plugins/"
+    owner: "{{ lookup('ansible.builtin.env', 'USER') }}"
+    group: "{{ lookup('ansible.builtin.env', 'USER') }}"
+    state: directory
+
+- name: Install TPM to handle tmux tmux-plugins
+  ansible.builtin.git:
+    repo: https://github.com/tmux-plugins/tpm
+    dest: "{{ lookup('ansible.builtin.env', 'HOME') }}/.tmux/plugins/tpm"
+
+- name: Run Tmux TPM post install script
+  ansible.builtin.shell: "{{ lookup('ansible.builtin.env', 'HOME') }}/.tmux/plugins/tpm/bin/install_plugins"
+  args:
+    executable: /bin/bash

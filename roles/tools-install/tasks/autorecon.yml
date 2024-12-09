@@ -1,0 +1,41 @@
+# code: language=ansible
+---
+- name: Copy AutoRecon from repository
+  ansible.builtin.git:
+    repo: https://github.com/Tib3rius/AutoRecon
+    dest: /opt/autorecon
+    update: true
+    force: true
+  become: true
+
+- name: Install AutoRecon support packages
+  ansible.builtin.apt:
+    name: "{{ autorecon_packages }}"
+    state: present
+  become: true
+
+- name: Install AutoRecon Requirements
+  ansible.builtin.pip:
+    executable: pip3
+    requirements: /opt/autorecon/requirements.txt
+
+- name: Install Python Pipx
+  ansible.builtin.pip:
+    name: "pipx"
+    executable: pip3
+  become: true
+
+- name: Run pipx ensurepath
+  ansible.builtin.shell: python3 -m pipx ensurepath
+  args:
+    executable: /bin/bash
+
+- name: Source .zshrc
+  ansible.builtin.shell: source "{{ lookup('ansible.builtin.env', 'HOME') }}/.zshrc"
+  args:
+    executable: /bin/zsh
+
+- name: Install AutoRecon via pipx
+  community.general.pipx: 
+    name: AutoRecon
+    source: git+https://github.com/Tib3rius/AutoRecon.git

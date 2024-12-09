@@ -1,0 +1,24 @@
+# code: language=ansible
+---
+- name: Install VS Code
+  ansible.builtin.include_role:
+    name: gantsign.visual-studio-code
+  vars:
+    users:
+      - username: "{{ lookup('ansible.builtin.env', 'USER') }}"
+        visual_studio_code_extensions:
+          - bungcip.better-toml
+          - eamodio.gitlens
+          - golang.go
+          - ms-python.python
+          - ms-python.vscode-pylance
+          - redhat.ansible
+          - redhat.vscode-yaml
+          - streetsidesoftware.code-spell-checker
+        visual_studio_code_settings_overwrite: true
+        visual_studio_code_settings: {
+          "editor.rulers": [80, 100, 120],
+          "editor.renderWhitespace": true
+        }
+        visual_studio_code_keybindings_overwrite: true
+        visual_studio_code_keybindings: []

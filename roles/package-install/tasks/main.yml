@@ -1,0 +1,19 @@
+---
+- name: Install Kali packages
+  ansible.builtin.apt:
+    name: "{{ packages }}"
+    state: present
+  become: true
+
+- name: Install Python Pip Packages
+  ansible.builtin.pip:
+    name: "{{ item }}"
+    executable: pip3
+  loop: "{{ python_pip_packages }}"
+
+- name: Install Ruby Gem Packages
+  community.general.gem:
+    name: "{{ item }}"
+    user_install: false
+  loop: "{{ ruby_gem_packages }}"
+  become: true

@@ -1,0 +1,63 @@
+---
+packages:
+  - awscli
+  - azure-cli
+  - cmake
+  #- covenant-kbx # Does not install on Arm64/M1/M2
+  - curl
+  - docker-compose
+  - docker.io
+  - enum4linux
+  - exa
+  - exif
+  - exiftool
+  - ffuf
+  - flameshot
+  - gdb
+  - gdbserver
+  - ghidra
+  - gobuster
+  - hexedit
+  - jq
+  - libimage-exiftool-perl
+  - libssl-dev
+  - nbtscan-unixwiz
+  - neo4j
+  - net-tools
+  - nikto
+  - nmap
+  - openssh-server
+  - parallel
+  - payloadsallthethings
+  - pipx
+  - plocate
+  - python3-pip
+  - python3-venv
+  - rlwrap
+  - scite
+  - seclists
+  - smbclient
+  - smtp-user-enum
+  - whatweb
+  - wireshark
+  - xclip
+  - xsel
+
+python_pip_packages:
+  - arsenal-cli
+  - bloodhound
+  - capstone
+  - mitm6
+  - pipenv
+  - poetry
+  - pwntools
+  - pywal
+  - roadrecon
+  - ropper
+  - unicorn
+
+ruby_gem_packages:
+  - evil-winrm
+  - stringio
+  - winrm
+  - winrm-fs

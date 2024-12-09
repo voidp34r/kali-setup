@@ -1,0 +1,44 @@
+# code: language=ansible
+---
+- name: Clone pyenv git repositories
+  ansible.builtin.git:
+    repo: "https://github.com/pyenv/pyenv.git"
+    dest: "{{ lookup('ansible.builtin.env', 'HOME') }}/.pyenv"
+    force: true
+- name: Clone pyenv plugin git repositories
+  ansible.builtin.git:
+    repo: "https://github.com/{{ item.repo }}"
+    dest: "{{ lookup('ansible.builtin.env', 'HOME') }}/.pyenv/plugins/{{ item.name }}"
+    force: true
+  loop: 
+    - name: pyenv-doctot
+      repo: "pyenv/pyenv-doctor.git"
+    - name: pyenv-update
+      repo: "pyenv/pyenv-update.git"
+    - name: pyenv-virtualenv
+      repo: "pyenv/pyenv-virtualenv.git"
+- name: Setup pyenv init in .zshrc
+  ansible.builtin.blockinfile:
+    path: "{{ lookup('ansible.builtin.env', 'HOME') }}/.zshrc"
+    insertbefore: EOF
+    marker: "# {mark} pyenv Setup header"
+    block: |
+      # Init pyenv.
+      export PYENV_ROOT="$HOME/.pyenv"
+      command -v pyenv >/dev/null || export PATH="$PYENV_ROOT/bin:$PATH"
+      eval "$(pyenv init -)"
+      eval "$(pyenv virtualenv-init -)"
+
+- name: Install pyenv/python build dependencies
+  ansible.builtin.apt:
+    name: "{{ packages }}"
+    state: present
+  become: true
+  loop:
+    - build-essential
+    - checkinstall
+    - libbz2-dev
+    - liblzma-dev
+    - libreadline-dev
+    - libsqlite3-dev
+    - tk-dev
